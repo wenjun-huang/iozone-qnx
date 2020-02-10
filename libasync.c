@@ -103,11 +103,15 @@
 #	define aio_write	aio_write64
 #endif
 
-#if defined(solaris) || defined(linux) || defined(SCO_Unixware_gcc) || defined(__NetBSD__)
+#if defined(solaris) || defined(linux) || defined(SCO_Unixware_gcc) || defined(__NetBSD__) || defined(__QNX__)
 #else
 #include <sys/timers.h>
 #endif
+#if defined(__QNX__)
+#include <errno.h>
+#else
 #include <sys/errno.h>
+#endif
 #include <unistd.h>
 #ifndef bsd4_4
 #include <malloc.h>
@@ -145,7 +149,7 @@ static void mbcopy(const char *source, char *dest, size_t len);
 #if !defined(solaris) && !defined(off64_t) && !defined(_OFF64_T) && !defined(__off64_t_defined) && !defined(SCO_Unixware_gcc)
 #	if defined(bsd4_4)
 typedef off_t off64_t;
-#	else
+#elif !defined(__QNX__)
 typedef long long off64_t;
 #	endif
 #endif

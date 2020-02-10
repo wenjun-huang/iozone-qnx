@@ -1,0 +1,22 @@
+# disguise qnx as freebsd, since it has the most similar system api to qnx
+CC=/opt/qnx/qnx700/host/linux/x86_64/usr/bin/qcc -V5.4.0,gcc_ntoaarch64le -D__FreeBSD__ -DDONT_HAVE_O_DIRECT -DNO_MADVISE -D__QNX__
+
+qnx:	iozone_qnx.o libbif.o libasync.o fileop_qnx.o pit_server.o
+	$(CC) -O $(LDFLAGS) iozone_qnx.o libbif.o libasync.o -lsocket -lc -o iozone
+	$(CC)  -O fileop_qnx.o -o fileop
+	$(CC)  -O pit_server.o -lsocket -lc -o pit_server
+
+iozone_qnx.o:	iozone.c libbif.c  libasync.c
+	@echo ""
+	@echo "Build iozone for QNX"
+	@echo ""
+	$(CC) -c -O  -DNAME='"qnx"' -DHAVE_ANSIC_C -D_FILE_OFFSET_BITS=64 -DASYNC_IO $(CFLAGS) iozone.c -o iozone_qnx.o
+	$(CC) -c -O -DHAVE_ANSIC_C -D_FILE_OFFSET_BITS=64 -DASYNC_IO  $(CFLAGS) libbif.c -o libbif.o
+	$(CC) -c -O  -DNAME='"qnx"' -DHAVE_ANSIC_C -D_FILE_OFFSET_BITS=64 -DASYNC_IO $(CFLAGS) libasync.c -o libasync.o
+
+fileop_qnx.o:	fileop.c
+	@echo ""
+	@echo "Building fileop for QNX"
+	@echo ""
+	$(CC) -Wall -c -O $(CFLAGS) -D_FILE_OFFSET_BITS=64 fileop.c -o fileop_qnx.o
+

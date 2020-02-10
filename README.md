@@ -1,2 +1,6 @@
 # iozone-qnx
-port iozone to qnx
+## Build for qnx
+
+```sh
+$ make -f makefile.qnx
+```

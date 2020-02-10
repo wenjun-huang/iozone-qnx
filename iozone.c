@@ -1807,7 +1807,8 @@ long long chid;
 int file_lock;
 unsigned int pattern;
 long long stride = STRIDE;
-long long delay,purge,fetchon;
+long long purge,fetchon;
+long long delay1;
 off64_t  numrecs64 = (off64_t)NUMRECS;
 long long reclen = RECLEN;
 long long delay_start,depth;
@@ -19762,16 +19763,16 @@ get_rusage_resolution()
 
 	finishtime=cputime_so_far(); /* Warm up the instruction cache */
 	starttime=cputime_so_far();  /* Warm up the instruction cache */
-	delay=j=0;		   /* Warm up the data cache */
+	delay1=j=0;		   /* Warm up the data cache */
 	while(1)
 	{
 		starttime=cputime_so_far();
-		for(j=0;j< delay;j++)
+		for(j=0;j< delay1;j++)
 			;
 		finishtime=cputime_so_far();
 		if(starttime==finishtime)
 			
-			delay++;
+			delay1++;
 		else
 			break;
 	}
@@ -22486,7 +22487,7 @@ become_client()
 	MS_flag = cc.c_MS_flag;
 	mmap_mix = cc.c_mmap_mix;
 	Kplus_flag = cc.c_Kplus_flag;
-	delay = cc.c_delay;
+	delay1 = cc.c_delay;
 	stride = cc.c_stride;
 	rest_val = cc.c_rest_val;
 	depth = cc.c_depth;
